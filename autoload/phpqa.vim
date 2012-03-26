@@ -187,7 +187,7 @@ function s:ParseClist()
 
     let sign = s:signName
 
-    if has("pe")
+    if has("perl")
         execute "perl &ParseClist(" . sign . ")"
     else
 
@@ -254,7 +254,7 @@ function s:GetSign(line)
     elseif exists("b:quickhigh_warning_re") && -1 != match(a:line, b:quickhigh_warning_re)
         let sign = "QuickHighMakeWarning"
     else
-        let sign = "QuickHighMakeError"
+        let sign = s:signName
     endif
 
     return sign
@@ -268,7 +268,6 @@ endfunction
 function s:AddSignsWrapper(which)
     let cur_buf = bufname("%")
 
-    echohl ErrorMsg | echo "Buffer: ".cur_buf | echohl None
     " in case we're called in the error list window or something
     if "" == cur_buf && "current" == a:which
         return
@@ -299,17 +298,13 @@ endfunction
 " 4782 is a just a random number so we won't clash with anyone else's id
 "
 function s:AddSignsActual(which, sign)
-    echohl ErrorMsg | echo "using sign ".a:sign | echohl None
-    if has("rl")
-        echohl ErrorMsg | echo "running perl with sign ".a:sign | echohl None
+    if has("perl")
         execute "perl &AddSignsActual('" . a:which . "', '" . a:sign . "')"
-        " echo "perl end: " . strftime("%c")
         return
     endif
 
     let add_ok  = 0
     let cur_buf = bufname("") 
-        echohl ErrorMsg | echo "current buffer: ".cur_buf | echohl None
 
     " sign1:file1:line1:sign2:file2:line2:
     let pos = 0
@@ -318,11 +313,9 @@ function s:AddSignsActual(which, sign)
         if -1 == send
             break
         endif
-        echohl ErrorMsg | echo s:error_list." from ".pos." + ".(send-pos) | echohl None
         let sign = strpart(s:error_list, pos, (send - pos))
 
         if a:sign == sign
-            echohl ErrorMsg | echo "signs are equal!" | echohl None
             let pos  = send + 1
             let fend = match(s:error_list, '¬', pos)
             let file = strpart(s:error_list, pos, (fend - pos))
@@ -341,7 +334,6 @@ function s:AddSignsActual(which, sign)
 
             " only add signs for files that are loaded
             if add_ok
-                echohl ErrorMsg | echo "adding sign ".sign ." to buffer ".cur_buf | echohl None
                 " echo "sign place 4782 name=" . sign . " line=" . line . " file=" . file
                 exe ":sign place 4782 name=" . sign . " line=" . line . " file=\".expand(\"%:p\")"
                 let s:num_signs = s:num_signs + 1
@@ -401,4 +393,26 @@ function QuickhighDebug()
 endfunction
 endif
 
-" vim: ts=4 sw=4 et sts=4
+function! phpqa#PhpLint()
+	call phpqa#RemoveSigns("discard")
+	let l:php_output=system("php -l ".@%." 1>/dev/null")
+	let l:php_list=split(l:php_output, "\n")
+	if 0 != len(l:php_list)
+		set errorformat=%m\ in\ %f\ on\ line\ %l
+		cexpr l:php_list[0]
+		cope
+		call phpqa#Init("PhpError")
+		return 1
+	endif
+	return 0
+endf
+
+function! phpqa#PhpCodeSniffer()
+	call phpqa#RemoveSigns("discard")
+	let l:phpcs_output=system(g:php_check_codesniffer_cmd." ".@%)
+	let l:phpcs_list=split(l:phpcs_output, "\n")
+	set errorformat=%f:%l:%c:\ %m
+	cexpr l:phpcs_list
+	cope
+	call phpqa#Init("CodeSnifferError")
+endf
