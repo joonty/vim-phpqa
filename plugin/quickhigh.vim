@@ -33,3 +33,10 @@ if !exists("no_plugin_maps") && !exists("no_quickhigh_maps")
 endif
 
 " Most of quickhigh has now been added to the autoload file
+"
+let g:sign_codesniffererror = "(PHP_CodeSniffer)"
+sign define CodeSnifferError linehl=WarningMsg text=C  texthl=WarningMsg
+let g:sign_messdetectorerror = "(PHPMD)"
+sign define MessDetectorError linehl=WarningMsg text=M  texthl=WarningMsg
+let g:sign_phperror = "(PHP)"
+sign define PhpError linehl=Error text=P texthl=Error

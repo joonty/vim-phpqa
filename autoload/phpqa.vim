@@ -11,17 +11,6 @@ set cpo&vim
 let s:num_signs = 0
 let s:signName = ""
 
-"
-" the following lets user's define their own signs
-"
-
-let g:sign_codesniffererror = "(PHP_CodeSniffer)"
-sign define CodeSnifferError linehl=WarningMsg text=C  texthl=WarningMsg
-let g:sign_messdetectorerror = "(PHPMD)"
-sign define MessDetectorError linehl=WarningMsg text=M  texthl=WarningMsg
-let g:sign_phperror = "(PHP)"
-sign define PhpError linehl=Error text=P texthl=Error
-
 "=============================================================================
 " GLOBAL FUNCTIONS {{{1
 
