@@ -1,16 +1,16 @@
-" phpcodesniffer.vim -- Revisar los estándares de programación con
-" PhpCodeSniffer 
-" @Author:      Eduardo Magrané , basado en phpchecksyntax de Thomas Link (samul@web.de)
+" phpqa.vim -- 
+" Run PHP analysis tools on the current file, including PHP lint, Code sniffer
+" and mess detector.
+" @Author:      Jon Cairns <jon@joncairns.com>
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
-" @Created:     31-Oct-2009.
-" @Last Change: .
-" @Revision:    0.2.21
-" @todo Aceptar parámetro de standard que se desea
-if exists("g:php_check_codesniffer")
+" @Created:     26-March-2012.
+" @Revision:    0.1
+"
+if exists("g:phpqa_check")
 	finish
 endif
 
-let g:php_check_codesniffer = 1
+let g:phpqa_check = 1
 
 if !exists("g:phpqa_codesniffer_cmd")
 	let g:phpqa_codesniffer_cmd='phpcs --standard=Cake --report=emacs'
@@ -30,4 +30,4 @@ function! phpqa:RunCommands()
 endf
 
 "autocmd BufWritePost *.php call PhpCodeSniffer()
-autocmd BufWritePost *.php call phpqa:RunCommands()
+autocmd BufWritePost * call phpqa:RunCommands()
