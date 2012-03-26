@@ -7,8 +7,6 @@ let g:loaded_phpqa= 1
 let s:keepcpo           = &cpo
 set cpo&vim
 
-" ---------------------------------------------------------------------
-" Functions: {{{1
 
 let s:num_signs = 0
 let s:signName = ""
@@ -23,6 +21,9 @@ let g:sign_messdetectorerror = "(PHPMD)"
 sign define MessDetectorError linehl=WarningMsg text=M  texthl=WarningMsg
 let g:sign_phperror = "(PHP)"
 sign define PhpError linehl=Error text=P texthl=Error
+
+"=============================================================================
+" GLOBAL FUNCTIONS {{{1
 
 "
 " Description:
@@ -370,16 +371,24 @@ if exists("quickhigh_plugin_debug")
 endif
 
 function! phpqa#PhpLint()
-	call phpqa#RemoveSigns("discard")
-	let l:php_output=system("php -l ".@%." 1>/dev/null")
-	let l:php_list=split(l:php_output, "\n")
-	if 0 != len(l:php_list)
-		let l:php_list[0] = "(PHP) ".l:php_list[0]
-		set errorformat=%m\ in\ %f\ on\ line\ %l
-		cexpr l:php_list[0]
-		cope
-		call phpqa#Init("PhpError")
-		return 1
+	if 0 != len(g:phpqa_php_cmd)
+		call phpqa#RemoveSigns("discard")
+		let l:php_output=system(g:phpqa_php_cmd." -l ".@%." 1>/dev/null")
+		let l:php_list=split(l:php_output, "\n")
+		if 0 != len(l:php_list)
+			let l:php_list[0] = "(PHP) ".l:php_list[0]
+			set errorformat=%m\ in\ %f\ on\ line\ %l
+			cexpr l:php_list[0]
+			cope
+			call phpqa#Init("PhpError")
+			return 1
+		else
+			if 1 == g:phpqa_verbose
+				echohl Error | echo "No syntax errors" | echohl None
+			endif
+		endif
+	elseif 1 == g:phpqa_verbose
+		echohl Error | echo "PHP binary set to empty, not running lint" | echohl None
 	endif
 	return 0
 endf
@@ -391,6 +400,9 @@ function! phpqa#PhpCodeSniffer()
 		let l:phpcs_list=split(l:phpcs_output, "\n")
 	else
 		let l:phpcs_list = []
+		if 1 == g:phpqa_verbose
+			echohl Error | echo "PHPCS binary set to empty, not running codesniffer" | echohl None
+		endif
 	endif
 	return l:phpcs_list
 endf
@@ -407,36 +419,49 @@ function! phpqa#PhpMessDetector()
 		endif
 	else
 		let l:phpmd_list = []
+		if 1 == g:phpqa_verbose
+			echohl Error | echo "PHPMD binary set to empty, not running mess detector" | echohl None
+		endif
 	endif
+	return l:phpmd_list
+endf
+
+function s:CombineLists(phpcs_list,phpmd_list)
+
+	if 0 != len(a:phpcs_list)
+		let k = 0
+		for val in a:phpcs_list
+			let a:phpcs_list[k] = a:phpcs_list[k]." (PHP_CodeSniffer)"
+			let k = k+1
+		endfor
+	endif
+	if 0 != len(a:phpmd_list)
+		let k = 0
+		for val in a:phpmd_list
+			let a:phpmd_list[k] = a:phpmd_list[k]." (PHPMD)"
+			let k = k+1
+		endfor
+	endif
+	return a:phpcs_list + a:phpmd_list
 endf
 
 
 function! phpqa#PhpQaTools(runcs,runmd)
 	call phpqa#RemoveSigns("discard")
 
-	if 1 == runcs
+	if 1 == a:runcs
 		let l:phpcs_list=phpqa#PhpCodeSniffer()
 	else
 		let l:phpcs_list = []
 	endif
 
-	let l:phpmd_list = phpqa#PhpMessDetector()
+	if 1 == a:runmd
+		let l:phpmd_list = phpqa#PhpMessDetector()
+	else
+		let l:phpmd_list = []
+	endif
 
-	if 0 != len(l:phpcs_list)
-		let k = 0
-		for val in l:phpcs_list
-			let l:phpcs_list[k] = l:phpcs_list[k]." (PHP_CodeSniffer)"
-			let k = k+1
-		endfor
-	endif
-	if 0 != len(l:phpmd_list)
-		let k = 0
-		for val in l:phpmd_list
-			let l:phpmd_list[k] = l:phpmd_list[k]." (PHPMD)"
-			let k = k+1
-		endfor
-	endif
-	let error_list = l:phpcs_list + l:phpmd_list
+	let error_list=s:CombineLists(l:phpcs_list,l:phpmd_list)
 	if 0 != len(error_list)
 		set errorformat=%f:%l:%c:\ %m,%f:%l\	%m
 		cexpr error_list 
@@ -444,3 +469,6 @@ function! phpqa#PhpQaTools(runcs,runmd)
 		call phpqa#Init("CodeSnifferError")
 	endif
 endf
+
+" }}}1
+"=============================================================================
