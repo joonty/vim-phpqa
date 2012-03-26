@@ -12,8 +12,12 @@ endif
 
 let g:php_check_codesniffer = 1
 
-if !exists("g:php_check_codesniffer_cmd")
-	let g:php_check_codesniffer_cmd='phpcs --standard=Cake --report=emacs'
+if !exists("g:phpqa_codesniffer_cmd")
+	let g:phpqa_codesniffer_cmd='phpcs --standard=Cake --report=emacs'
+endif
+
+if !exists("g:phpqa_messdetector_cmd")
+	let g:phpqa_messdetector_cmd='phpmd'
 endif
 
 function! phpqa:RunCommands() 
@@ -27,6 +31,3 @@ endf
 
 "autocmd BufWritePost *.php call PhpCodeSniffer()
 autocmd BufWritePost *.php call phpqa:RunCommands()
-
-sign define CodeSnifferError linehl=WarningMsg text=CS texthl=WarningMsg
-sign define PhpError linehl=Error text=P texthl=Error

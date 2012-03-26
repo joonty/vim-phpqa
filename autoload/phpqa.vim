@@ -35,6 +35,12 @@ if "" != v:errmsg
     sign define QuickHighGrep linehl=tag text=GR texthl=tag
 endif
 
+let g:sign_codesniffererror = "(PHP_CodeSniffer)"
+sign define CodeSnifferError linehl=WarningMsg text=C  texthl=WarningMsg
+let g:sign_messdetectorerror = "(PHPMD)"
+sign define MessDetectorError linehl=WarningMsg text=M  texthl=WarningMsg
+let g:sign_phperror = "(PHP)"
+sign define PhpError linehl=Error text=P texthl=Error
 
 "
 " Description:
@@ -225,9 +231,9 @@ function s:ParseClist()
             " echo "file: " . file
             " echo "line: " . line
 
-            "if "QuickHighGrep" != sign
-            "    let sign = s:GetSign(strpart(s:clist, lend, (partend - lend)))
-            "endif
+            if "QuickHighGrep" != sign
+                let sign = s:GetSign(strpart(s:clist, lend, (partend - lend)))
+            endif
 
             let s:error_list = s:error_list . sign . "¬" . file . "¬" . line . "¬"
         endwhile
@@ -235,7 +241,6 @@ function s:ParseClist()
 
     " try and conserve memory
     let s:clist = ""
-
     if "" == s:error_list
         return -1
     else
@@ -249,14 +254,15 @@ endfunction
 " a separate function so perl can call it.
 "
 function s:GetSign(line)
-    if exists("b:quickhigh_error_re") && -1 != match(a:line, b:quickhigh_error_re)
-        let sign = "QuickHighMakeError"
-    elseif exists("b:quickhigh_warning_re") && -1 != match(a:line, b:quickhigh_warning_re)
-        let sign = "QuickHighMakeWarning"
+    if exists("g:sign_phperror") && -1 != match(a:line, g:sign_phperror)
+        let sign = "PhpError"
+    elseif exists("g:sign_codesniffererror") && -1 != match(a:line, g:sign_codesniffererror)
+        let sign = "CodeSnifferError"
+    elseif exists("g:sign_messdetectorerror") && -1 != match(a:line, g:sign_messdetectorerror)
+        let sign = "MessDetectorError"
     else
         let sign = s:signName
     endif
-
     return sign
 endfunction
 
@@ -284,7 +290,9 @@ function s:AddSignsWrapper(which)
 
     " this is how we give preference to errors if a line has both warnings and errors.
     else
-        call s:AddSignsActual(a:which, s:signName)
+        call s:AddSignsActual(a:which, "PhpError")
+        call s:AddSignsActual(a:which, "CodeSnifferError")
+        call s:AddSignsActual(a:which, "MessDetectorError")
         "call s:AddSignsActual(a:which, "QuickHighMakeWarning")
         "call s:AddSignsActual(a:which, "QuickHighMakeError")
     endif
@@ -398,6 +406,7 @@ function! phpqa#PhpLint()
 	let l:php_output=system("php -l ".@%." 1>/dev/null")
 	let l:php_list=split(l:php_output, "\n")
 	if 0 != len(l:php_list)
+		let l:php_list[0] = "(PHP) ".l:php_list[0]
 		set errorformat=%m\ in\ %f\ on\ line\ %l
 		cexpr l:php_list[0]
 		cope
@@ -409,11 +418,28 @@ endf
 
 function! phpqa#PhpCodeSniffer()
 	call phpqa#RemoveSigns("discard")
-	let l:phpcs_output=system(g:php_check_codesniffer_cmd." ".@%)
+	let l:phpcs_output=system(g:phpqa_codesniffer_cmd." ".@%)
+	let l:phpmd_output=system(g:phpqa_messdetector_cmd." ".@%." text /home/jon/www/bromford/httpdocs/build/phpmd.xml")
 	let l:phpcs_list=split(l:phpcs_output, "\n")
+	let l:phpmd_list=split(l:phpmd_output, "\n")
 	if 0 != len(l:phpcs_list)
-		set errorformat=%f:%l:%c:\ %m
-		cexpr l:phpcs_list
+		let k = 0
+		for val in l:phpcs_list
+			let l:phpcs_list[k] = l:phpcs_list[k]." (PHP_CodeSniffer)"
+			let k = k+1
+		endfor
+	endif
+	if 0 != len(l:phpmd_list)
+		let k = 0
+		for val in l:phpmd_list
+			let l:phpmd_list[k] = l:phpmd_list[k]." (PHPMD)"
+			let k = k+1
+		endfor
+	endif
+	let error_list = l:phpcs_list + l:phpmd_list
+	if 0 != len(error_list)
+		set errorformat=%f:%l:%c:\ %m,%f:%l\	%m
+		cexpr error_list 
 		cope
 		call phpqa#Init("CodeSnifferError")
 	endif
