@@ -13,21 +13,27 @@ endif
 let g:phpqa_check = 1
 
 if !exists("g:phpqa_codesniffer_cmd")
-	let g:phpqa_codesniffer_cmd='phpcs --standard=Cake --report=emacs'
+	let g:phpqa_codesniffer_cmd='phpcs'
+endif
+if !exists("g:phpqa_codesniffer_args")
+	let g:phpqa_codesniffer_args="--standard=PHPCS"
 endif
 
 if !exists("g:phpqa_messdetector_cmd")
 	let g:phpqa_messdetector_cmd='phpmd'
 endif
+if !exists("g:phpqa_messdetector_ruleset")
+	let g:phpqa_messdetector_ruleset=""
+endif
 
-function! phpqa:RunCommands() 
+function! phpqa:RunAll() 
 	if &filetype == 'php'
+		" Check syntax valid before running others
 		let retval=phpqa#PhpLint()
 		if 0 == retval
-			call phpqa#PhpCodeSniffer()
+			call phpqa#PhpQaTools()
 		endif
 	endif	
 endf
 
-"autocmd BufWritePost *.php call PhpCodeSniffer()
-autocmd BufWritePost * call phpqa:RunCommands()
+autocmd BufWritePost * call phpqa:RunAll()

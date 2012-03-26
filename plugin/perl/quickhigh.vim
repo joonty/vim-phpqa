@@ -36,10 +36,8 @@ sub ParseClist {
         # if column information is given in the compiler 
         $line =~ s/(\d*).*/$1/;
 
-        if ("QuickHighGrep" ne $sign) {
-            $text = quotemeta $text;
-            (undef, $sign) = VIM::Eval("s:GetSign(\"$text\")");
-        }
+        $text = quotemeta $text;
+        (undef, $sign) = VIM::Eval("s:GetSign(\"$text\")");
 
         # VIM::Msg("sign: $sign\nfile: $file\nline: $line\ntext: $text\n");
 
