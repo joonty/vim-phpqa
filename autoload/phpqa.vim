@@ -411,8 +411,10 @@ function! phpqa#PhpCodeSniffer()
 	call phpqa#RemoveSigns("discard")
 	let l:phpcs_output=system(g:php_check_codesniffer_cmd." ".@%)
 	let l:phpcs_list=split(l:phpcs_output, "\n")
-	set errorformat=%f:%l:%c:\ %m
-	cexpr l:phpcs_list
-	cope
-	call phpqa#Init("CodeSnifferError")
+	if 0 != len(l:phpcs_list)
+		set errorformat=%f:%l:%c:\ %m
+		cexpr l:phpcs_list
+		cope
+		call phpqa#Init("CodeSnifferError")
+	endif
 endf

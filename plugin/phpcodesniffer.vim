@@ -28,5 +28,5 @@ endf
 "autocmd BufWritePost *.php call PhpCodeSniffer()
 autocmd BufWritePost *.php call phpqa:RunCommands()
 
-sign define CodeSnifferError linehl=Error text=CS texthl=Error
+sign define CodeSnifferError linehl=WarningMsg text=CS texthl=WarningMsg
 sign define PhpError linehl=Error text=P texthl=Error
