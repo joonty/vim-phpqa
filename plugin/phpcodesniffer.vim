@@ -19,24 +19,13 @@ endif
 
 function! PhpCodeSniffer()
 	if &filetype == 'php'
-		let t  = @t
-		let mp = &makeprg
-		let sp = &shellpipe
-		let ef = &errorformat
-		try
-		 	call QuickHigh:RemoveSigns("discard")
-			let l:phpcs_output=system(g:php_check_codesniffer_cmd." ".@%)
-			let l:phpcs_list=split(l:phpcs_output, "\n")
-			set errorformat=%f:%l:%c:\ %m
-			cexpr l:phpcs_list
-			cope
-			call QuickHigh:Init("CodeSnifferError")
-		finally
-			let @t = t
-			let &makeprg     = mp
-			let &shellpipe   = sp
-			let &errorformat = ef
-		endtry
+		call phpqa#RemoveSigns("discard")
+		let l:phpcs_output=system(g:php_check_codesniffer_cmd." ".@%)
+		let l:phpcs_list=split(l:phpcs_output, "\n")
+		set errorformat=%f:%l:%c:\ %m
+		cexpr l:phpcs_list
+		cope
+		call phpqa#Init("CodeSnifferError")
 	endif
 endf
 
@@ -45,3 +34,4 @@ inoremap   :call PhpCodeSniffer()
 
 autocmd BufWritePost *.php call PhpCodeSniffer()
 
+sign define CodeSnifferError linehl=Error text=CS texthl=Error

@@ -10,7 +10,7 @@ sub ParseClist {
     my $clist;
     my @clist;
 
-    # VIM::Msg("sign: $sign");
+     VIM::Msg("sign: $sign");
 
     (undef, $clist) = VIM::Eval("s:clist");
     @clist = split /\n/, $clist;
@@ -41,7 +41,7 @@ sub ParseClist {
             (undef, $sign) = VIM::Eval("s:GetSign(\"$text\")");
         }
 
-        # VIM::Msg("sign: $sign\nfile: $file\nline: $line\ntext: $text\n");
+         VIM::Msg("sign: $sign\nfile: $file\nline: $line\ntext: $text\n");
 
         $error_hash{$sign}{$file}{$line} = 1;
     } continue {
@@ -62,7 +62,7 @@ endif
 if has("perl")
 perl << EOF
 sub PlaceSign {
-    # VIM::Msg("sign place 4782 name=$sign line=$line file=$file");
+    VIM::Msg("sign place 4782 name=$sign line=$line file=$file");
     VIM::DoCommand("sign place 4782 name=$sign line=$line file=$file");
     VIM::DoCommand("let s:num_signs = s:num_signs + 1");
     VIM::Eval("setbufvar(\"$bufname\", \"quickhigh_plugin_processed\", 1)");
