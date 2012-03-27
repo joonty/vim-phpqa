@@ -475,6 +475,24 @@ function! phpqa#PhpQaTools(runcs,runmd)
 		call phpqa#Init("CodeSnifferError")
 	endif
 endf
+let s:num_cc_signs = 0
+function! phpqa#PhpCodeCoverage()
 
+	while 0 != s:num_cc_signs
+		sign unplace 4783
+		let s:num_cc_signs = s:num_cc_signs - 1
+	endwhile
+
+	let file_tmp = ""
+	while 0 == len(g:phpqa_codecoverage_file)
+		let file_tmp = input("Please specify a clover code coverage XML file: ",file_tmp,"file")
+		if filereadable(file_tmp)
+			let g:phpqa_codecoverage_file = file_tmp
+		else
+			echohl Error |echo "Not a valid or readable file"|echohl None
+		endif
+	endwhile
+	execute "perl &AddCodeCoverageSigns('".g:phpqa_codecoverage_file."')"
+endf
 " }}}1
 "=============================================================================

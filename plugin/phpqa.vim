@@ -48,6 +48,10 @@ if !exists("g:phpqa_messdetector_ruleset")
 	let g:phpqa_messdetector_ruleset=""
 endif
 
+if !exists("g:phpqa_codecoverage_file") 
+	let g:phpqa_codecoverage_file = ""
+endif
+
 function! phpqa:RunAll() 
 	if &filetype == 'php'
 		" Check syntax valid before running others
@@ -65,3 +69,4 @@ autocmd BufWritePost * call phpqa:RunAll()
 command Php call phpqa#PhpLint()
 command Phpcs call phpqa#PhpQaTools(1,0)
 command Phpmd call phpqa#PhpQaTools(0,1)
+command Phpcc call phpqa#PhpCodeCoverage()

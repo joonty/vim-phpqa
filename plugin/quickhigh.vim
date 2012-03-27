@@ -33,8 +33,10 @@ nnoremap <silent> <SID>QuickHighToggle :call phpqa#ToggleSigns()<cr>
 " Most of quickhigh has now been added to the autoload file
 "
 let g:sign_codesniffererror = "(PHP_CodeSniffer)"
-sign define CodeSnifferError linehl=WarningMsg text=C  texthl=WarningMsg
+sign define CodeSnifferError linehl=WarningMsg text=S>  texthl=WarningMsg
 let g:sign_messdetectorerror = "(PHPMD)"
-sign define MessDetectorError linehl=WarningMsg text=M  texthl=WarningMsg
+sign define MessDetectorError linehl=WarningMsg text=M>  texthl=WarningMsg
 let g:sign_phperror = "(PHP)"
-sign define PhpError linehl=Error text=P texthl=Error
+sign define PhpError linehl=Error text=P> texthl=Error
+sign define CodeCoverageCovered text=C>  texthl=Error
+sign define CodeCoverageNotCovered text=C>  texthl=Cursor
