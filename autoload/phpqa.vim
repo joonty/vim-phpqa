@@ -470,7 +470,7 @@ function! phpqa#PhpQaTools(runcs,runmd)
 	let error_list=s:CombineLists(l:phpcs_list,l:phpmd_list)
 	if 0 != len(error_list)
 		set errorformat=%f:%l:%c:\ %m,%f:%l\	%m
-		cexpr error_list 
+		cgete error_list 
 		cope
 		call phpqa#Init("CodeSnifferError")
 	endif
