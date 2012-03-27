@@ -17,7 +17,7 @@ You can toggle the highlighted lines using the command:
 <Leader>qa
 ```
 
-What's the `<Leader>` key? It's likely to be either "\" or ",", but you can set it from the command line or in your *.vimrc* file using:
+What's the `<Leader>` key? It's likely to be either `\` or `,`, but you can set it from the command line or in your *.vimrc* file using:
 
 ```vim
 let mapleader="@"
@@ -38,6 +38,7 @@ Installation is easy-peasy if you're using [Vundle][4]. Just add this to your *.
 ```vim
 Bundle 'joonty/vim-phpqa.git'
 ```
+and run `vim +BundleInstall +qall` from a terminal.
 
 If you aren't using vundle, you will have to extract the files in each folder to the correct folder in *.vim/*.
 
