@@ -1,4 +1,3 @@
-
 # PHP QA Tools For Vim
 
 This is a plugin for Vim that integrates PHP quality checking tools, to allow you to code to a particular standard and easily spot errors and violations.
@@ -60,7 +59,7 @@ let g:phpqa_codesniffer_args = "--standard=Zend"
 
 However, **don't** set the `--report=` argument, as it won't work!
 
-For all the commands, you can specify the executable:
+For all the commands, you can override the executable:
 
 ```vim
 " PHP executable
@@ -70,6 +69,7 @@ let g:phpqa_codesniffer_cmd='/path/to/phpcs'
 " PHP Mess Detector binary
 let g:phpqa_messdetector_cmd='/path/to/phpmd'
 ```
+However, you don't need to do this if the commands `php`, `phpcs` and `phpmd` are can be found in your `$PATH` environment variable.
 
 ### Acknowlegements
 
