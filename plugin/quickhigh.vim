@@ -1,19 +1,19 @@
 " Description:
-" Vim plugin for highlighting errors that have been defined from
-" ':clist'.
+" Vim plugin that uses PHP qa tools and highlights the current file with
+" syntax errors and coding standard violations.
 "
-" Version:
-"   $Revision: 2.00 $
-"   $Date: 20012/03/26 01:34:59 $
+" License:
+"   GPL (http://www.gnu.org/licenses/gpl.txt)
 "
 " Authors:
-" Brian Medley <freesoftware@4321.tv> (Original)
 " Jon Cairns <jon@joncairns.com>
+" Brian Medley <freesoftware@4321.tv> (Author of quickhigh)
 "
-" Modifications:
-" Made some functions global to allow calling from other scripts.
+" Changes:
+" QuickHigh has been modified substantially to allow for integration with
+" tools other than grep and make. The majority of the code has been moved to
+" autoload/phpqa.vim
 "
-
 
 if 0 == has("signs")
     echohl ErrorMsg | echo "I'm sorry, phpqa needs a vim with +signs." | echohl None
@@ -24,13 +24,11 @@ if has("perl")
     source <sfile>:p:h/perl/quickhigh.vim
 endif
 
-if !exists("no_plugin_maps") && !exists("no_quickhigh_maps")
-    if !hasmapto('<Plug>QuickHighToggle', 'n')
-        nmap <unique> <Leader>qa  <Plug>QuickHighToggle
-    endif
-    nnoremap <unique> <script> <Plug>QuickHighToggle <SID>QuickHighToggle
-    nnoremap <silent> <SID>QuickHighToggle :call phpqa#ToggleSigns()<cr>
+if !hasmapto('<Plug>QuickHighToggle', 'n')
+nmap <unique> <Leader>qa  <Plug>QuickHighToggle
 endif
+nnoremap <unique> <script> <Plug>QuickHighToggle <SID>QuickHighToggle
+nnoremap <silent> <SID>QuickHighToggle :call phpqa#ToggleSigns()<cr>
 
 " Most of quickhigh has now been added to the autoload file
 "

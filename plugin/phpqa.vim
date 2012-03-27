@@ -1,11 +1,19 @@
-" phpqa.vim -- 
-" Run PHP analysis tools on the current file, including PHP lint, Code sniffer
-" and mess detector.
-" @Author:      Jon Cairns <jon@joncairns.com>
-" @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
-" @Created:     26-March-2012.
-" @Revision:    0.1
+" Description:
+" Vim plugin that uses PHP qa tools and highlights the current file with
+" syntax errors and coding standard violations.
 "
+" License:
+"   GPL (http://www.gnu.org/licenses/gpl.txt)
+"
+" Authors:
+" Jon Cairns <jon@joncairns.com>
+" Brian Medley <freesoftware@4321.tv> (Author of quickhigh)
+"
+" Changes:
+" QuickHigh has been modified substantially to allow for integration with
+" tools other than grep and make. The majority of the code has been moved to
+" autoload/phpqa.vim
+
 if exists("g:phpqa_check")
 	finish
 endif

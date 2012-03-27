@@ -1,3 +1,20 @@
+" Description:
+" Vim plugin that uses PHP qa tools and highlights the current file with
+" syntax errors and coding standard violations.
+"
+" License:
+"   GPL (http://www.gnu.org/licenses/gpl.txt)
+"
+" Authors:
+" Jon Cairns <jon@joncairns.com>
+" Brian Medley <freesoftware@4321.tv> (Author of quickhigh)
+"
+" Changes:
+" QuickHigh has been modified substantially to allow for integration with
+" tools other than grep and make. The majority of the code has been moved to
+" autoload/phpqa.vim
+"
+
 " ------------------------------------------------------------------------------
 " Exit when already loaded (or "compatible" mode set)
 if exists("g:loaded_phpqa") || &cp
