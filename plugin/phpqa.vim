@@ -52,6 +52,10 @@ if !exists("g:phpqa_codecoverage_file")
 	let g:phpqa_codecoverage_file = ""
 endif
 
+if !exists("g:phpqa_codecoverage_autorun")
+	let g:phpqa_codecoverage_autorun = 0
+endif
+
 function! phpqa:RunAll() 
 	if &filetype == 'php'
 		" Check syntax valid before running others
@@ -62,8 +66,23 @@ function! phpqa:RunAll()
 	endif	
 endf
 
+function! phpqa:RunCodeCoverage()
+	if &filetype == 'php'
+		if "" != g:phpqa_codecoverage_file && 1 == g:phpqa_codecoverage_autorun
+			call phpqa#PhpCodeCoverage()
+		endif
+	endif
+endf
+
+if !hasmapto('<Plug>CodeCoverageToggle', 'n')
+nmap <unique> <Leader>qc  <Plug>CodeCoverageToggle
+endif
+nnoremap <unique> <script> <Plug>CodeCoverageToggle <SID>CodeCoverageToggle
+nnoremap <silent> <SID>CodeCoverageToggle :call phpqa#CodeCoverageToggle()<cr>
+
 " Run all tools automatically on write
 autocmd BufWritePost * call phpqa:RunAll()
+autocmd BufRead * call phpqa:RunCodeCoverage()
 
 " Allow each command to be called individually
 command Php call phpqa#PhpLint()

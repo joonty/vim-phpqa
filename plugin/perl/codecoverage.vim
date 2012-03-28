@@ -4,6 +4,8 @@
 "
 if has("perl")
 perl <<EOF
+our $loaded = "";
+our $mtime = 0;
 sub AddCodeCoverageSigns {
 	my $clover = shift;
 	local $line;
@@ -15,10 +17,20 @@ sub AddCodeCoverageSigns {
 
 	use XML::XPath;
 	use XML::XPath::XMLParser;
+	use POSIX;
 
-	#VIM::DoCommand("echohl Error| echo \"$file\"|echohl None");
 	eval {
-		my $xp = XML::XPath->new(filename => $clover);
+		#Get mod time of clover file
+		$clovermtime = ( stat $clover )[9];
+
+		# Keep loaded XML in memory, try and re-use that for speed
+		# If different clover file provided or file has been updated, re-run
+		if (!defined($xp) || $loaded != $clover || $mtime != $clovermtime) {
+			our $xp = XML::XPath->new(filename => $clover);
+			$loaded = $clover;
+			$mtime = $clovermtime;
+			VIM::DoCommand("echohl Error| echo \"Re-reading clover file, mtime $mtime\"|echohl None");
+		}
 
 		my $nodeset = $xp->find('/coverage/project/file[@name="'.$file.'"]/line[@type="stmt"]'); # find all paragraphs
 
@@ -29,7 +41,8 @@ sub AddCodeCoverageSigns {
 			VIM::DoCommand("let s:num_cc_signs = s:num_cc_signs + 1");
 			VIM::DoCommand("sign place 4783 name=$sign line=$line file=$file");
 		}
-	} or do {
+	};
+	if ($@) {
 		VIM::DoCommand("echohl Error| echo \"Failed to read clover XML file $clover: $@\"|echohl None");
 		VIM::DoCommand('let g:phpqa_codecoverage_file = ""');
 	};

@@ -476,12 +476,27 @@ function! phpqa#PhpQaTools(runcs,runmd)
 	endif
 endf
 let s:num_cc_signs = 0
-function! phpqa#PhpCodeCoverage()
 
+function! phpqa#CodeCoverageToggle()
+	if 0 != s:num_cc_signs
+		let g:phpqa_codecoverage_autorun = 0
+		call s:RemoveCodeCoverageSigns()
+	else
+		let g:phpqa_codecoverage_autorun = 1
+		call phpqa#PhpCodeCoverage()
+	endif
+	
+endf
+
+function s:RemoveCodeCoverageSigns()
 	while 0 != s:num_cc_signs
 		sign unplace 4783
 		let s:num_cc_signs = s:num_cc_signs - 1
 	endwhile
+endf
+
+function! phpqa#PhpCodeCoverage()
+	call s:RemoveCodeCoverageSigns()
 
 	let file_tmp = ""
 	while 0 == len(g:phpqa_codecoverage_file)
