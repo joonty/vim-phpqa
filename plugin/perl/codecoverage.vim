@@ -29,7 +29,6 @@ sub AddCodeCoverageSigns {
 			our $xp = XML::XPath->new(filename => $clover);
 			$loaded = $clover;
 			$mtime = $clovermtime;
-			VIM::DoCommand("echohl Error| echo \"Re-reading clover file, mtime $mtime\"|echohl None");
 		}
 
 		my $nodeset = $xp->find('/coverage/project/file[@name="'.$file.'"]/line[@type="stmt"]'); # find all paragraphs
