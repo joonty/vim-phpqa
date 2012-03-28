@@ -376,6 +376,7 @@ if exists("quickhigh_plugin_debug")
 	endfunction
 endif
 
+" Run the PHP linter to check for syntax errors
 function! phpqa#PhpLint()
 	if 0 != len(g:phpqa_php_cmd)
 		call phpqa#RemoveSigns("discard")
@@ -399,6 +400,7 @@ function! phpqa#PhpLint()
 	return 0
 endf
 
+" Run PHP code sniffer.
 function! phpqa#PhpCodeSniffer()
 	" Run codesniffer if the command hasn't been unset
 	if 0 != len(g:phpqa_codesniffer_cmd)
@@ -413,16 +415,23 @@ function! phpqa#PhpCodeSniffer()
 	return l:phpcs_list
 endf
 
+" Run mess detector.
+"
+" The user is required to specify a ruleset XML file if they haven't already.
 function! phpqa#PhpMessDetector()
 	" Run messdetector if the command hasn't been unset
 	if 0 != len(g:phpqa_messdetector_cmd)
-		if 0 == len(g:phpqa_messdetector_ruleset)
-			echohl Error | echo "A ruleset is required by PHP Mess Detector. Please specify an XML file in g:phpqa_messdetecor_ruleset" |echohl None
-			let l:phpmd_list = []
-		else
-			let l:phpmd_output=system(g:phpqa_messdetector_cmd." ".@%." text ".g:phpqa_messdetector_ruleset)
-			let l:phpmd_list=split(l:phpmd_output, "\n")
-		endif
+		let file_tmp = ""
+		while 0 == len(g:phpqa_messdetector_ruleset)
+			let file_tmp = expand(resolve(input("Please specify a mess detector ruleset XML file: ",file_tmp,"file")))
+			if filereadable(file_tmp)
+				let g:phpqa_messdetector_ruleset = file_tmp
+			else
+				echohl Error |echo "Not a valid or readable file"|echohl None
+			endif
+		endwhile
+		let l:phpmd_output=system(g:phpqa_messdetector_cmd." ".@%." text ".g:phpqa_messdetector_ruleset)
+		let l:phpmd_list=split(l:phpmd_output, "\n")
 	else
 		let l:phpmd_list = []
 		if 1 == g:phpqa_verbose
@@ -432,6 +441,7 @@ function! phpqa#PhpMessDetector()
 	return l:phpmd_list
 endf
 
+" Combine error lists for codesniffer and messdetector
 function s:CombineLists(phpcs_list,phpmd_list)
 
 	if 0 != len(a:phpcs_list)
@@ -451,7 +461,7 @@ function s:CombineLists(phpcs_list,phpmd_list)
 	return a:phpcs_list + a:phpmd_list
 endf
 
-
+" Run Code Sniffer and Mess Detector.
 function! phpqa#PhpQaTools(runcs,runmd)
 	call phpqa#RemoveSigns("discard")
 
@@ -477,6 +487,10 @@ function! phpqa#PhpQaTools(runcs,runmd)
 endf
 let s:num_cc_signs = 0
 
+" Toggle the code coverage markers.
+"
+" If the command has been run, remove the signs. Otherwise run it with
+" phpqa#PhpCodeCoverage()
 function! phpqa#CodeCoverageToggle()
 	if 0 != s:num_cc_signs
 		let g:phpqa_codecoverage_autorun = 0
@@ -488,6 +502,7 @@ function! phpqa#CodeCoverageToggle()
 	
 endf
 
+" Remove code coverage markers
 function s:RemoveCodeCoverageSigns()
 	while 0 != s:num_cc_signs
 		sign unplace 4783
@@ -495,12 +510,13 @@ function s:RemoveCodeCoverageSigns()
 	endwhile
 endf
 
+" Run code coverage, and ask the user for the coverage file if not specified
 function! phpqa#PhpCodeCoverage()
 	call s:RemoveCodeCoverageSigns()
 
 	let file_tmp = ""
 	while 0 == len(g:phpqa_codecoverage_file)
-		let file_tmp = input("Please specify a clover code coverage XML file: ",file_tmp,"file")
+		let file_tmp = resolve(expand(input("Please specify a clover code coverage XML file: ",file_tmp,"file")))
 		if filereadable(file_tmp)
 			let g:phpqa_codecoverage_file = file_tmp
 		else
