@@ -317,8 +317,10 @@ function s:AddSignsActual(which, sign)
 
             " only add signs for files that are loaded
             if add_ok
-                " echo "sign place 4782 name=" . sign . " line=" . line . " file=" . file
-                exe ":sign place 4782 name=" . sign . " line=" . line . " file=\".expand(\"%:p\")"
+                if has('perl')
+                    " echo "sign place 4782 name=" . sign . " line=" . line . " file=" . file
+                    exe ":sign place 4782 name=" . sign . " line=" . line . " file=\"".expand("%:p")."\""
+                endif
                 let s:num_signs = s:num_signs + 1
                 "call setbufvar(bufname(file), "quickhigh_plugin_processed", 1)
             endif
