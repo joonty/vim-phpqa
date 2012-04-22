@@ -299,11 +299,11 @@ function s:AddSignsActual(which, sign)
         let sign = strpart(s:error_list, pos, (send - pos))
 
         if a:sign == sign
-            let pos  = send + 1
+            let pos  = send + 2
             let fend = match(s:error_list, '¬', pos)
             let file = strpart(s:error_list, pos, (fend - pos))
 
-            let pos  = fend + 1
+            let pos  = fend + 2
             let lend = match(s:error_list, '¬', pos)
             let line = strpart(s:error_list, pos, (lend - pos))
             let pos  = lend + 1
@@ -319,7 +319,7 @@ function s:AddSignsActual(which, sign)
             if add_ok
                 if has('perl')
                     " echo "sign place 4782 name=" . sign . " line=" . line . " file=" . file
-                    exe ":sign place 4782 name=" . sign . " line=" . line . " file=\"".expand("%:p")."\""
+                    exe ":sign place 4782 name=" . sign . " line=" . line . " file=" . expand("%:p")
                 endif
                 let s:num_signs = s:num_signs + 1
                 "call setbufvar(bufname(file), "quickhigh_plugin_processed", 1)
