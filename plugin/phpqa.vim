@@ -15,7 +15,7 @@
 " autoload/phpqa.vim
 
 if exists("g:phpqa_check")
-	finish
+    finish
 endif
 
 if 0 == has("signs")
@@ -34,77 +34,77 @@ let g:phpqa_verbose = 0
 
 " PHP binary
 if !exists("g:phpqa_php_cmd")
-	let g:phpqa_php_cmd='php'
+    let g:phpqa_php_cmd='php'
 endif
 
 " PHPCS binary (PHP_CodeSniffer)
 if !exists("g:phpqa_codesniffer_cmd")
-	let g:phpqa_codesniffer_cmd='phpcs'
+    let g:phpqa_codesniffer_cmd='phpcs'
 endif
 
 " Arguments to pass to code sniffer, e.g standard name
 if !exists("g:phpqa_codesniffer_args")
-	let g:phpqa_codesniffer_args="--standard=PHPCS"
+    let g:phpqa_codesniffer_args="--standard=PHPCS"
 endif
 
 " PHPMD binary (mess detector)
 if !exists("g:phpqa_messdetector_cmd")
-	let g:phpqa_messdetector_cmd='phpmd'
+    let g:phpqa_messdetector_cmd='phpmd'
 endif
 
 " Rule set XML file for mess detector
 if !exists("g:phpqa_messdetector_ruleset")
-	let g:phpqa_messdetector_ruleset=""
+    let g:phpqa_messdetector_ruleset=""
 endif
 
 " Clover code coverage file
 if !exists("g:phpqa_codecoverage_file") 
-	let g:phpqa_codecoverage_file = ""
+    let g:phpqa_codecoverage_file = ""
 endif
 
 " Whether to automatically show code coverage on file load
 if !exists("g:phpqa_codecoverage_autorun")
-	let g:phpqa_codecoverage_autorun = 0
+    let g:phpqa_codecoverage_autorun = 0
 endif
 
 " Whether to automatically run codesniffer when saving a file
 if !exists("g:phpqa_codesniffer_autorun")
-	let g:phpqa_codesniffer_autorun = 1
+    let g:phpqa_codesniffer_autorun = 1
 endif
 
 " Whether to automatically run messdetector when saving a file
 if !exists("g:phpqa_messdetector_autorun")
-	let g:phpqa_messdetector_autorun = 1
+    let g:phpqa_messdetector_autorun = 1
 endif
 
 " Whether qa tools should run on buffer write
 if !exists("g:phpqa_run_on_write")
-	let g:phpqa_run_on_write = 1
+    let g:phpqa_run_on_write = 1
 endif
 
 
 " Run all QA tools
 function! phpqa:RunAll() 
-	if &filetype == 'php'
-		" Check syntax valid before running others
-		let retval=phpqa#PhpLint()
-		if 0 == retval && 1 == g:phpqa_run_on_write
-			call phpqa#PhpQaTools(g:phpqa_codesniffer_autorun,g:phpqa_messdetector_autorun)
-		endif
-	endif	
+    if &filetype == 'php'
+        " Check syntax valid before running others
+        let retval=phpqa#PhpLint()
+        if 0 == retval && 1 == g:phpqa_run_on_write
+            call phpqa#PhpQaTools(g:phpqa_codesniffer_autorun,g:phpqa_messdetector_autorun)
+        endif
+    endif	
 endf
 
 " Run code coverage
 function! phpqa:RunCodeCoverage()
-	if &filetype == 'php'
-		if "" != g:phpqa_codecoverage_file && 1 == g:phpqa_codecoverage_autorun
-			call phpqa#PhpCodeCoverage()
-		endif
-	endif
+    if &filetype == 'php'
+        if "" != g:phpqa_codecoverage_file && 1 == g:phpqa_codecoverage_autorun
+            call phpqa#PhpCodeCoverage()
+        endif
+    endif
 endf
 
 if !hasmapto('<Plug>CodeCoverageToggle', 'n')
-nmap <unique> <Leader>qc  <Plug>CodeCoverageToggle
+    nmap <unique> <Leader>qc  <Plug>CodeCoverageToggle
 endif
 nnoremap <unique> <script> <Plug>CodeCoverageToggle <SID>CodeCoverageToggle
 nnoremap <silent> <SID>CodeCoverageToggle :call phpqa#CodeCoverageToggle()<cr>
@@ -121,7 +121,7 @@ command Phpcc call phpqa#PhpCodeCoverage()
 
 
 if !hasmapto('<Plug>QuickHighToggle', 'n')
-nmap <unique> <Leader>qa  <Plug>QAToolsToggle
+    nmap <unique> <Leader>qa  <Plug>QAToolsToggle
 endif
 nnoremap <unique> <script> <Plug>QAToolsToggle <SID>QAToolsToggle
 nnoremap <silent> <SID>QAToolsToggle :call phpqa#QAToolsToggle()<cr>
