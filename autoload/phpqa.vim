@@ -393,6 +393,8 @@ function! phpqa#PhpLint()
 			if 1 == g:phpqa_verbose
 				echohl Error | echo "No syntax errors" | echohl None
 			endif
+			cgete []
+			ccl
 		endif
 	elseif 1 == g:phpqa_verbose
 		echohl Error | echo "PHP binary set to empty, not running lint" | echohl None
@@ -483,6 +485,9 @@ function! phpqa#PhpQaTools(runcs,runmd)
 		cgete error_list 
 		cope
 		call phpqa#Init("CodeSnifferError")
+	else
+		cgete []
+		ccl
 	endif
 endf
 let s:num_cc_signs = 0
@@ -500,6 +505,16 @@ function! phpqa#CodeCoverageToggle()
 		call phpqa#PhpCodeCoverage()
 	endif
 	
+endf
+
+function! phpqa#QAToolsToggle()
+	call phpqa#ToggleSigns()
+	if g:phpqa_run_on_write == 1
+		let g:phpqa_run_on_write = 0
+		echohl Error | echo "PHP QA tools won't run automatically on save" | echohl None
+	else
+		let g:phpqa_run_on_write = 1
+	endif
 endf
 
 " Remove code coverage markers
