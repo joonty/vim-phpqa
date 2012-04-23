@@ -77,12 +77,18 @@ if !exists("g:phpqa_messdetector_autorun")
 	let g:phpqa_messdetector_autorun = 1
 endif
 
+" Whether qa tools should run on buffer write
+if !exists("g:phpqa_run_on_write")
+	let g:phpqa_run_on_write = 1
+endif
+
+
 " Run all QA tools
 function! phpqa:RunAll() 
 	if &filetype == 'php'
 		" Check syntax valid before running others
 		let retval=phpqa#PhpLint()
-		if 0 == retval
+		if 0 == retval && 1 == g:phpqa_run_on_write
 			call phpqa#PhpQaTools(g:phpqa_codesniffer_autorun,g:phpqa_messdetector_autorun)
 		endif
 	endif	
@@ -115,10 +121,10 @@ command Phpcc call phpqa#PhpCodeCoverage()
 
 
 if !hasmapto('<Plug>QuickHighToggle', 'n')
-nmap <unique> <Leader>qa  <Plug>QuickHighToggle
+nmap <unique> <Leader>qa  <Plug>QAToolsToggle
 endif
-nnoremap <unique> <script> <Plug>QuickHighToggle <SID>QuickHighToggle
-nnoremap <silent> <SID>QuickHighToggle :call phpqa#ToggleSigns()<cr>
+nnoremap <unique> <script> <Plug>QAToolsToggle <SID>QAToolsToggle
+nnoremap <silent> <SID>QAToolsToggle :call phpqa#QAToolsToggle()<cr>
 
 " Most of quickhigh has now been added to the autoload file
 "
