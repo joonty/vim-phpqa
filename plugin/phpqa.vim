@@ -126,13 +126,26 @@ endif
 nnoremap <unique> <script> <Plug>QAToolsToggle <SID>QAToolsToggle
 nnoremap <silent> <SID>QAToolsToggle :call phpqa#QAToolsToggle()<cr>
 
-" Most of quickhigh has now been added to the autoload file
-"
-let g:sign_codesniffererror = "(PHP_CodeSniffer)"
+" Code sniffer sign config
+let g:phpqa_codesniffer_append = "(PHP_CodeSniffer)"
+let g:phpqa_codesniffer_type = "S"
 sign define CodeSnifferError linehl=WarningMsg text=S>  texthl=WarningMsg
-let g:sign_messdetectorerror = "(PHPMD)"
+
+" Mess detector sign config
+let g:phpqa_messdetector_append = "(PHPMD)"
+let g:phpqa_messdetector_type = "M"
 sign define MessDetectorError linehl=WarningMsg text=M>  texthl=WarningMsg
-let g:sign_phperror = "(PHP)"
+
+" PHP error sign config
+let g:phpqa_php_append = "(PHP)"
+let g:phpqa_php_type = "P"
 sign define PhpError linehl=Error text=P> texthl=Error
+
+" Generic error sign
+sign define GenericError linehl=Error text=U> texthl=Error
+
+" Code coverage sign config
 sign define CodeCoverageCovered text=C>  texthl=Error
 sign define CodeCoverageNotCovered text=C>  texthl=Cursor
+
+let g:phpqa_sign_type_map = {'S':"CodeSnifferError",'M':"MessDetectorError",'P':"PhpError"}
