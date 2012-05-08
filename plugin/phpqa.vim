@@ -7,12 +7,6 @@
 "
 " Authors:
 " Jon Cairns <jon@joncairns.com>
-" Brian Medley <freesoftware@4321.tv> (Author of quickhigh)
-"
-" Changes:
-" QuickHigh has been modified substantially to allow for integration with
-" tools other than grep and make. The majority of the code has been moved to
-" autoload/phpqa.vim
 
 if exists("g:phpqa_check")
     finish
@@ -21,10 +15,6 @@ endif
 if 0 == has("signs")
     echohl ErrorMsg | echo "I'm sorry, phpqa needs a vim with +signs." | echohl None
     finish
-endif
-
-if has("perl")
-    source <sfile>:p:h/perl/quickhigh.vim
 endif
 
 let g:phpqa_check = 1
@@ -120,7 +110,7 @@ command Phpmd call phpqa#PhpQaTools(0,1)
 command Phpcc call phpqa#PhpCodeCoverage()
 
 
-if !hasmapto('<Plug>QuickHighToggle', 'n')
+if !hasmapto('<Plug>QAToolsToggle', 'n')
     nmap <unique> <Leader>qa  <Plug>QAToolsToggle
 endif
 nnoremap <unique> <script> <Plug>QAToolsToggle <SID>QAToolsToggle

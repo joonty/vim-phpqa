@@ -7,12 +7,6 @@
 "
 " Authors:
 " Jon Cairns <jon@joncairns.com>
-" Brian Medley <freesoftware@4321.tv> (Author of quickhigh)
-"
-" Changes:
-" QuickHigh has been modified substantially to allow for integration with
-" tools other than grep and make. The majority of the code has been moved to
-" autoload/phpqa.vim
 "
 
 " ------------------------------------------------------------------------------
@@ -153,7 +147,6 @@ function! phpqa#PhpMessDetector()
             endif
         endwhile
         let l:phpmd_output=system(g:phpqa_messdetector_cmd." ".@%." text ".g:phpqa_messdetector_ruleset)
-        echohl Error | echo l:phpmd_output | echohl None
         let l:phpmd_list=split(l:phpmd_output, "\n")
     else
         let l:phpmd_list = []
