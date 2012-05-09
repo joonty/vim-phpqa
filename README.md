@@ -45,7 +45,7 @@ and run `vim +BundleInstall +qall` from a terminal.
 
 If you aren't using vundle, you will have to extract the files in each folder to the correct folder in *.vim/*.
 
-**Note:** your vim installation must be compiled with *signs* and *perl* for this plugin to work.
+**Note:** your Vim installation must be compiled with *signs* for this plugin to work. If you want to use code coverage support you will need to have Vim compiled with Python.
 
 ### Configuration
 
