@@ -1,5 +1,5 @@
 function! AddCodeCoverageSigns(clover)
-    let g:phpqa_py_cc_loaded = 1
+    if has('python')
 python << EOF
 import libxml2
 import vim
@@ -51,4 +51,7 @@ for node in res:
 ctxt.xpathFreeContext()
 
 EOF
+    else
+        echohl Error | echo "Code coverage support for PHPQA requires Vim compiled with Python" | echohl None
+    endif
 endfunction
