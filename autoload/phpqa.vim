@@ -19,7 +19,7 @@ let s:keepcpo           = &cpo
 set cpo&vim
 let s:lineid = 9012
 let s:numsigns = 0
-let s:num_cc_signs = 0
+let g:phpqa_num_cc_signs = 0
 
 "=============================================================================
 " PRIVATE FUNCTIONS {{{1
@@ -50,9 +50,9 @@ endfunction
 
 " Remove code coverage markers
 function s:RemoveCodeCoverageSigns()
-    while 0 != s:num_cc_signs
+    while 0 != g:phpqa_num_cc_signs
         sign unplace 4783
-        let s:num_cc_signs = s:num_cc_signs - 1
+        let g:phpqa_num_cc_signs = g:phpqa_num_cc_signs - 1
     endwhile
 endfunction
 
@@ -189,7 +189,7 @@ endf
 " If the command has been run, remove the signs. Otherwise run it with
 " phpqa#PhpCodeCoverage()
 function! phpqa#CodeCoverageToggle()
-    if 0 != s:num_cc_signs
+    if 0 != g:phpqa_num_cc_signs
         let g:phpqa_codecoverage_autorun = 0
         call s:RemoveCodeCoverageSigns()
     else
@@ -223,7 +223,7 @@ function! phpqa#PhpCodeCoverage()
             echohl Error |echo "Not a valid or readable file"|echohl None
         endif
     endwhile
-    execute "perl &AddCodeCoverageSigns('".g:phpqa_codecoverage_file."')"
+    call AddCodeCoverageSigns(g:phpqa_codecoverage_file)
 endf
 " }}}1
 "=============================================================================

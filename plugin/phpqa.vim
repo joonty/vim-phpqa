@@ -17,6 +17,9 @@ if 0 == has("signs")
     finish
 endif
 
+let $CUR_DIRECTORY=expand("<sfile>:p:h")
+source $CUR_DIRECTORY/python/codecoverage.vim
+
 let g:phpqa_check = 1
 
 " Give more feedback about commands
@@ -135,7 +138,7 @@ sign define PhpError linehl=Error text=P> texthl=Error
 sign define GenericError linehl=Error text=U> texthl=Error
 
 " Code coverage sign config
-sign define CodeCoverageCovered text=C>  texthl=Error
-sign define CodeCoverageNotCovered text=C>  texthl=Cursor
+sign define CodeCoverageCovered text=C>  texthl=Cursor
+sign define CodeCoverageNotCovered text=C>  texthl=Error
 
 let g:phpqa_sign_type_map = {'S':"CodeSnifferError",'M':"MessDetectorError",'P':"PhpError"}
