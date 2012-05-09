@@ -1,12 +1,18 @@
+"-------------------------------------------------
+" PHP QA tools for Vim                        {{{
+"
 " Description:
 " Vim plugin that uses PHP qa tools and highlights the current file with
 " syntax errors and coding standard violations.
 "
 " License:
-"   GPL (http://www.gnu.org/licenses/gpl.txt)
+"   MIT (http://www.gnu.org/licenses/gpl.txt)
 "
 " Authors:
 " Jon Cairns <jon@joncairns.com>
+"
+" }}}
+"-------------------------------------------------
 
 if exists("g:phpqa_check")
     finish
