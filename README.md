@@ -32,7 +32,15 @@ You can also run each command separately on demand:
 - `:Phpmd` - run mess detector (will ask for a rule XML file if not set) 
 - `:Phpcc` - show code coverage (will ask for a clover XML file if not set)
 
-If you generate clover code coverage reports with your tests, you can toggle markers to show which lines are covered and which aren't. You can run the command once using `Phpcs` as shown above, or you can configure it to load the markers every time you open a new file - see the configuration section for more information.
+### Code Coverage
+
+If you generate clover code coverage reports with your tests, you can toggle markers to show which lines are covered and which aren't. You can run the command once using `Phpcc` as shown above, or you can configure it to load the markers every time you open a new file - see the configuration section for more information.
+
+You can also toggle code coverage (to stop it automatically running on opening a file) with:
+
+```vim
+<Leader>qc
+```
 
 ### Installation
 
@@ -51,7 +59,9 @@ If you aren't using vundle, you will have to extract the files in each folder to
 
 Each command has it's own configuration settings, which allow you to get the functionality you want.
 
-PHP mess detecotr needs a ruleset XML file (see the [mess detector website][2] for more information) to run, which you will be prompted for the first time the command runs. However, it's much easier to just specify it in your *.vimrc* file:
+#### PHP, Mess Detector and Codesniffer
+
+PHP mess detector needs a ruleset XML file (see the [mess detector website][2] for more information) to run, which you will be prompted for the first time the command runs. However, it's much easier to just specify it in your *.vimrc* file:
 
 ```vim
 let g:phpqa_messdetector_ruleset = "/path/to/phpmd.xml"
@@ -93,10 +103,22 @@ let g:phpqa_codesniffer_autorun = 0
 let g:phpqa_codecoverage_autorun = 1
 ```
 
-For code coverage, you can specify a clover XML file to stop the prompt:
+By default, the location list window will open when mess detector/codesniffer violations are found. You can stop this happening by setting this option:
 
 ```vim
+" Stop the location list opening automatically
+let g:phpqa_open_loc = 0
+```
+
+#### Code Coverage Configuration
+
+For code coverage, you can specify a clover XML file to stop the prompt appearing each time, and choose to only show markers for lines that aren't covered - by default both covered and uncovered code have markers. Not showing covered line markers is likely to speed things up noticeably when moving between files.
+
+```vim
+" Clover code coverage XML file
 let g:phpqa_codecoverage_file = "/path/to/clover.xml"
+" Show markers for lines that ARE covered by tests (default = 1)
+let g:phpqa_codecoverage_showcovered = 0
 ```
 
 ### Acknowlegements
