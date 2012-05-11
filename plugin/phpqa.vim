@@ -66,6 +66,12 @@ if !exists("g:phpqa_codecoverage_autorun")
     let g:phpqa_codecoverage_autorun = 0
 endif
 
+" Whether to show signs for covered code (or only not covered)
+" It may speed things up to turn this off
+if !exists("g:phpqa_codecoverage_showcovered")
+    let g:phpqa_codecoverage_showcovered = 1
+endif
+
 " Whether to automatically run codesniffer when saving a file
 if !exists("g:phpqa_codesniffer_autorun")
     let g:phpqa_codesniffer_autorun = 1
@@ -79,6 +85,12 @@ endif
 " Whether qa tools should run on buffer write
 if !exists("g:phpqa_run_on_write")
     let g:phpqa_run_on_write = 1
+endif
+
+" Whether to open the location list automatically with CodeSniffer/Mess
+" detector violations
+if !exists("g:phpqa_open_loc")
+    let g:phpqa_open_loc = 1
 endif
 
 
@@ -108,8 +120,9 @@ endif
 nnoremap <unique> <script> <Plug>CodeCoverageToggle <SID>CodeCoverageToggle
 nnoremap <silent> <SID>CodeCoverageToggle :call phpqa#CodeCoverageToggle()<cr>
 
-" Run all tools automatically on write
+" Run all tools automatically on write and other events
 autocmd BufWritePost * call phpqa:RunAll()
+autocmd BufRead * call phpqa#PhpLint()
 autocmd BufRead * call phpqa:RunCodeCoverage()
 
 " Allow each command to be called individually

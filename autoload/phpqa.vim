@@ -83,27 +83,29 @@ endf
 
 " Run the PHP linter to check for syntax errors
 function! phpqa#PhpLint()
-    if 0 != len(g:phpqa_php_cmd)
-        let l:bufNo = bufnr('%')
-        call s:RemoveSigns()
-        let l:php_output=system(g:phpqa_php_cmd." -l ".@%." 1>/dev/null")
-        let l:php_list=split(l:php_output, "\n")
-        if 0 != len(l:php_list)
-            let l:php_list[0] = "P ".l:php_list[0]
-            set errorformat=%t\ %m\ in\ %f\ on\ line\ %l
-            lexpr l:php_list[0]
-            call s:AddSigns(l:bufNo)
-            lope
-            return 1
-        else
-            if 1 == g:phpqa_verbose
-                echohl Error | echo "No syntax errors" | echohl None
+    if &filetype == "php"
+        if 0 != len(g:phpqa_php_cmd)
+            let l:bufNo = bufnr('%')
+            call s:RemoveSigns()
+            let l:php_output=system(g:phpqa_php_cmd." -l ".@%." 1>/dev/null")
+            let l:php_list=split(l:php_output, "\n")
+            if 0 != len(l:php_list)
+                let l:php_list[0] = "P ".l:php_list[0]
+                set errorformat=%t\ %m\ in\ %f\ on\ line\ %l
+                lexpr l:php_list[0]
+                call s:AddSigns(l:bufNo)
+                lope
+                return 1
+            else
+                if 1 == g:phpqa_verbose
+                    echohl Error | echo "No syntax errors" | echohl None
+                endif
+                lgete []
+                lcl
             endif
-            lgete []
-            lcl
+        elseif 1 == g:phpqa_verbose
+            echohl Error | echo "PHP binary set to empty, not running lint" | echohl None
         endif
-    elseif 1 == g:phpqa_verbose
-        echohl Error | echo "PHP binary set to empty, not running lint" | echohl None
     endif
     return 0
 endfunction
@@ -177,7 +179,9 @@ function! phpqa#PhpQaTools(runcs,runmd)
         set errorformat=%t\ %f:%l:%c:\ %m,%t\ %f:%l\	%m
         lgete error_list 
         call s:AddSigns(l:bufNo)
-        lope
+        if g:phpqa_open_loc
+            lope
+        endif
     else
         lgete []
         lcl
