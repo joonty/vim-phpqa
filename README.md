@@ -135,4 +135,4 @@ This plugin is released under the [MIT License][6].
 [3]: http://vimdoc.sourceforge.net/htmldoc/quickfix.html
 [4]: https://github.com/gmarik/vundle
 [5]: http://www.vim.org/scripts/script.php?script_id=124
-[6]: https://raw.github.com/joonty/vim-phpqa/master/LICENSE
+[6]: https://github.com/joonty/vim-phpqa/raw/master/LICENSE
