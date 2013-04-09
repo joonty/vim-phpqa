@@ -142,12 +142,8 @@ function! phpqa#PhpMessDetector()
     if 0 != len(g:phpqa_messdetector_cmd)
         let file_tmp = ""
         while 0 == len(g:phpqa_messdetector_ruleset)
-            let file_tmp = expand(resolve(input("Please specify a mess detector ruleset XML file: ",file_tmp,"file")))
-            if filereadable(file_tmp)
-                let g:phpqa_messdetector_ruleset = file_tmp
-            else
-                echohl Error |echo "Not a valid or readable file"|echohl None
-            endif
+            let file_tmp = input("Please specify a mess detector ruleset file, or built in rule: ",file_tmp)
+            let g:phpqa_messdetector_ruleset = file_tmp
         endwhile
         let l:phpmd_output=system(g:phpqa_messdetector_cmd." ".@%." text ".g:phpqa_messdetector_ruleset)
         let l:phpmd_list=split(l:phpmd_output, "\n")

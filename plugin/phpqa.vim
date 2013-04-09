@@ -51,9 +51,9 @@ if !exists("g:phpqa_messdetector_cmd")
     let g:phpqa_messdetector_cmd='phpmd'
 endif
 
-" Rule set XML file for mess detector
+" Rule set built-in or XML file for mess detector, comma separated
 if !exists("g:phpqa_messdetector_ruleset")
-    let g:phpqa_messdetector_ruleset=""
+    let g:phpqa_messdetector_ruleset="codesize,unusedcode,naming"
 endif
 
 " Clover code coverage file
