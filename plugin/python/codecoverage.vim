@@ -41,7 +41,7 @@ try:
         mtime = time.ctime(os.path.getmtime(clover))
 
     ctxt = doc.xpathNewContext()
-    res = ctxt.xpathEval("/coverage/project/file[@name='"+fileName+"']/line[@type='stmt']")
+    res = ctxt.xpathEval("//file[@name='"+fileName+"']/line[@type='stmt']")
     cur_signs = int(vim.eval('g:phpqa_num_cc_signs'))
     showcovered = int(vim.eval('g:phpqa_codecoverage_showcovered'))
     cmd_list = ''
