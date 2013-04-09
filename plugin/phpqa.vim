@@ -57,7 +57,7 @@ if !exists("g:phpqa_messdetector_ruleset")
 endif
 
 " Clover code coverage file
-if !exists("g:phpqa_codecoverage_file") 
+if !exists("g:phpqa_codecoverage_file")
     let g:phpqa_codecoverage_file = ""
 endif
 
@@ -101,14 +101,14 @@ endif
 
 
 " Run all QA tools
-function! phpqa:RunAll() 
+function! phpqa:RunAll()
     if &filetype == 'php'
         " Check syntax valid before running others
         let retval=phpqa#PhpLint()
         if 0 == retval && 1 == g:phpqa_run_on_write
             call phpqa#PhpQaTools(g:phpqa_codesniffer_autorun,g:phpqa_messdetector_autorun)
         endif
-    endif	
+    endif
 endf
 
 " Run code coverage
