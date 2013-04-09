@@ -178,7 +178,7 @@ function! phpqa#PhpQaTools(runcs,runmd)
     let error_list=s:CombineLists(l:phpcs_list,l:phpmd_list)
     if 0 != len(error_list)
         set errorformat=%t\ %f:%l:%c:\ %m,%t\ %f:%l\	%m
-        lgete error_list 
+        lgete error_list
         call s:AddSigns(l:bufNo)
         if g:phpqa_open_loc
             lope
@@ -205,12 +205,13 @@ function! phpqa#CodeCoverageToggle()
 endf
 
 function! phpqa#QAToolsToggle()
-    call phpqa#ToggleSigns()
     if g:phpqa_run_on_write == 1
+        call s:RemoveSigns()
         let g:phpqa_run_on_write = 0
         echohl Error | echo "PHP QA tools won't run automatically on save" | echohl None
     else
         let g:phpqa_run_on_write = 1
+        echohl Error | echo "PHP QA tools has been enabled" | echohl None
     endif
 endf
 
