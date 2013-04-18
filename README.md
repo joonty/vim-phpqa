@@ -70,7 +70,7 @@ let g:phpqa_messdetector_ruleset = "/path/to/phpmd.xml"
 For PHP code sniffer, you can pass arguments to the command line binary (run `phpcs --help` to see a list). For example:
 
 ```vim
-" Set the codesniffer args (default = "--standard=PHPCS")
+" Set the codesniffer args
 let g:phpqa_codesniffer_args = "--standard=Zend"
 ```
 
