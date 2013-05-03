@@ -43,7 +43,7 @@ endif
 
 " Arguments to pass to code sniffer, e.g standard name
 if !exists("g:phpqa_codesniffer_args")
-    let g:phpqa_codesniffer_args="--standard=PHPCS"
+    let g:phpqa_codesniffer_args=""
 endif
 
 " PHPMD binary (mess detector)
