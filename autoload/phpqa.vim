@@ -95,7 +95,9 @@ function! phpqa#PhpLint()
                 set errorformat=%t\ %m\ in\ %f\ on\ line\ %l
                 lexpr l:php_list[0]
                 call s:AddSigns(l:bufNo)
-                lope
+                if g:phpqa_open_loc
+                    lope
+                endif
                 return 1
             else
                 if 1 == g:phpqa_verbose
