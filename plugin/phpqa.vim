@@ -127,9 +127,11 @@ nnoremap <unique> <script> <Plug>CodeCoverageToggle <SID>CodeCoverageToggle
 nnoremap <silent> <SID>CodeCoverageToggle :call phpqa#CodeCoverageToggle()<cr>
 
 " Run all tools automatically on write and other events
-autocmd BufWritePost * call phpqa:RunAll()
-autocmd BufRead * call phpqa#PhpLint()
-autocmd BufRead * call phpqa:RunCodeCoverage()
+if g:phpqa_run_on_write
+    autocmd BufWritePost * call phpqa:RunAll()
+    autocmd BufRead * call phpqa#PhpLint()
+    autocmd BufRead * call phpqa:RunCodeCoverage()
+endif
 
 " Allow each command to be called individually
 command Php call phpqa#PhpLint()
