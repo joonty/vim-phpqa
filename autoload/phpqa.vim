@@ -82,7 +82,7 @@ endf
 " GLOBAL FUNCTIONS {{{1
 
 " Run the PHP linter to check for syntax errors
-function! phpqa#PhpLint()
+function! Phpqa#PhpLint()
     if &filetype == "php"
         if 0 != len(g:phpqa_php_cmd)
             let l:bufNo = bufnr('%')
@@ -114,7 +114,7 @@ function! phpqa#PhpLint()
 endfunction
 
 " Run PHP code sniffer.
-function! phpqa#PhpCodeSniffer()
+function! Phpqa#PhpCodeSniffer()
     if @% == ""
         echohl Error | echo "Invalid buffer (are you in the error window?)" |echohl None
         return []
@@ -135,7 +135,7 @@ endf
 " Run mess detector.
 "
 " The user is required to specify a ruleset XML file if they haven't already.
-function! phpqa#PhpMessDetector()
+function! Phpqa#PhpMessDetector()
     if @% == ""
         echohl Error | echo "Invalid buffer (are you in the error window?)" |echohl None
         return []
@@ -157,18 +157,18 @@ function! phpqa#PhpMessDetector()
 endf
 
 " Run Code Sniffer and Mess Detector.
-function! phpqa#PhpQaTools(runcs,runmd)
+function! Phpqa#PhpQaTools(runcs,runmd)
     let l:bufNo = bufnr('%')
     call s:RemoveSigns()
 
     if 1 == a:runcs
-        let l:phpcs_list=phpqa#PhpCodeSniffer()
+        let l:phpcs_list=Phpqa#PhpCodeSniffer()
     else
         let l:phpcs_list = []
     endif
 
     if 1 == a:runmd
-        let l:phpmd_list = phpqa#PhpMessDetector()
+        let l:phpmd_list = Phpqa#PhpMessDetector()
     else
         let l:phpmd_list = []
     endif
@@ -190,19 +190,19 @@ endf
 " Toggle the code coverage markers.
 "
 " If the command has been run, remove the signs. Otherwise run it with
-" phpqa#PhpCodeCoverage()
-function! phpqa#CodeCoverageToggle()
+" Phpqa#PhpCodeCoverage()
+function! Phpqa#CodeCoverageToggle()
     if 0 != g:phpqa_num_cc_signs
         let g:phpqa_codecoverage_autorun = 0
         call s:RemoveCodeCoverageSigns()
     else
         let g:phpqa_codecoverage_autorun = 1
-        call phpqa#PhpCodeCoverage()
+        call Phpqa#PhpCodeCoverage()
     endif
 
 endf
 
-function! phpqa#QAToolsToggle()
+function! Phpqa#QAToolsToggle()
     if g:phpqa_run_on_write == 1
         call s:RemoveSigns()
         let g:phpqa_run_on_write = 0
@@ -215,7 +215,7 @@ endf
 
 
 " Run code coverage, and ask the user for the coverage file if not specified
-function! phpqa#PhpCodeCoverage()
+function! Phpqa#PhpCodeCoverage()
     call s:RemoveCodeCoverageSigns()
 
     let file_tmp = ""
