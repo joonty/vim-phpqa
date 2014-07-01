@@ -115,7 +115,7 @@ endf
 function! PhpqaRunCodeCoverage()
     if &filetype == 'php'
         if "" != g:phpqa_codecoverage_file && 1 == g:phpqa_codecoverage_autorun
-            call PhpqaPhp#CodeCoverage()
+            call Phpqa#PhpCodeCoverage()
         endif
     endif
 endf
