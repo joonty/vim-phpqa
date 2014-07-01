@@ -227,7 +227,9 @@ function! Phpqa#PhpCodeCoverage()
             echohl Error |echo "Not a valid or readable file"|echohl None
         endif
     endwhile
-    call AddCodeCoverageSigns(g:phpqa_codecoverage_file)
+    if filereadable(g:phpqa_codecoverage_file)
+        call AddCodeCoverageSigns(g:phpqa_codecoverage_file)
+    endif
 endf
 " }}}1
 "=============================================================================
