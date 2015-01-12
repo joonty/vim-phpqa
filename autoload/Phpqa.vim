@@ -3,7 +3,7 @@
 " syntax errors and coding standard violations.
 "
 " License:
-"   GPL (http://www.gnu.org/licenses/gpl.txt)
+"   MIT (https://raw.githubusercontent.com/joonty/vim-phpqa/master/LICENSE)
 "
 " Authors:
 " Jon Cairns <jon@joncairns.com>
