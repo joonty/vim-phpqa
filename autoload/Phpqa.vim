@@ -31,6 +31,9 @@ let g:phpqa_num_cc_signs = 0
 "
 function! s:AddSigns(buffer)
     for line in getloclist(0)
+        if line.lnum == 0
+            continue
+        endif
         if has_key(g:phpqa_sign_type_map,line.type)
             let l:name=g:phpqa_sign_type_map[line.type]
         else
