@@ -16,7 +16,7 @@ except NameError:
 
 clover = vim.eval('a:clover')
 buf = vim.eval('bufname("%")')
-fileName = vim.eval('fnamemodify("'+buf+'",":p")')
+fileName = vim.eval('fnamemodify("'+buf+'","%")')
 
 """
 XML may already be parsed and held in memory
@@ -41,7 +41,7 @@ try:
         mtime = time.ctime(os.path.getmtime(clover))
 
     ctxt = doc.xpathNewContext()
-    res = ctxt.xpathEval("//file[@name='"+fileName+"']/line[@type='stmt']")
+    res = ctxt.xpathEval("//file[substring(@name, string-length(@name) - string-length('"+fileName+"') + 1)='"+fileName+"']/line[@type='stmt']")
     cur_signs = int(vim.eval('g:phpqa_num_cc_signs'))
     showcovered = int(vim.eval('g:phpqa_codecoverage_showcovered'))
     cmd_list = ''
