@@ -15,9 +15,9 @@
 "-------------------------------------------------
 
 " Disable plugin if php isn't available
-"if 0 == has("php")
-"    finish
-"endif
+if !executable("php")
+    finish
+endif
 
 if exists("g:phpqa_check")
     finish
