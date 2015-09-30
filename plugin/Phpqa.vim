@@ -15,7 +15,7 @@
 "-------------------------------------------------
 
 " Disable plugin if php isn't available
-if 0 == has("php")
+if !executable("php")
     finish
 endif
 
