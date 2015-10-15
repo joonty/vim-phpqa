@@ -223,9 +223,12 @@ function! Phpqa#PhpCodeCoverage()
 
     let file_tmp = ""
     while 0 == len(g:phpqa_codecoverage_file)
-        let file_tmp = resolve(expand(input("Please specify a clover code coverage XML file: ",file_tmp,"file")))
+        let file_tmp = resolve(expand(input("Please specify a clover code coverage XML file (leave blank to cancel): ",file_tmp,"file")))
         if filereadable(file_tmp)
             let g:phpqa_codecoverage_file = file_tmp
+        elseif file_tmp == ""
+            echo "Cancelled"
+            break
         else
             echohl Error |echo "Not a valid or readable file"|echohl None
         endif
