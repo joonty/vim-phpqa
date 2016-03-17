@@ -93,7 +93,7 @@ function! Phpqa#PhpLint()
             let l:php_output=system(g:phpqa_php_cmd." -l ".@%." 1>/dev/null")
             let l:php_list=split(l:php_output, "\n")
 
-            if 0 != v:shell_error && match(l:php_list[0],"No syntax errors") == -1
+            if 0 != v:shell_error && !empty(l:php_list) && match(l:php_list[0],"No syntax errors") == -1
                 let l:php_list[0] = "P ".l:php_list[0]
                 set errorformat=%t\ %m\ in\ %f\ on\ line\ %l
                 lexpr l:php_list[0]
