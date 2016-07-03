@@ -2,7 +2,7 @@
 
 This is a plugin for Vim that integrates PHP quality checking tools, to allow you to code to a particular standard and easily spot errors and violations.
 
-It uses PHP linter to check for syntax errors, and integrates with [PHP Code Sniffer][1] and [PHP Mess Detector][2] to check for coding standard violations, and shows code coverage from clover XML files.
+It uses PHP linter to check for syntax errors, and integrates with [PHP Code Sniffer][1] and [PHP Mess Detector][2] to check for coding standard violations, and shows code coverage from clover XML files. It also integrates with [PHPCBF][7] to automatically fix some code standards violations.
 
 ### Quick Guide
 
@@ -15,6 +15,7 @@ You can toggle markers with the following commands (in command mode):
 ```vim
 <Leader>qa	" Show/hide code sniffer and mess detector violations
 <Leader>qc	" Show/hide code coverage markers
+<Leader>qf	" Run PHPCBF to fix some of the sniffer violations
 ```
 
 What's the `<Leader>` key? It's likely to be either `\` or `,`, but you can set it from the command line or in your *.vimrc* file using:
@@ -31,6 +32,7 @@ You can also run each command separately on demand:
 - `:Phpcs` - run code sniffer
 - `:Phpmd` - run mess detector (will ask for a rule XML file if not set) 
 - `:Phpcc` - show code coverage (will ask for a clover XML file if not set)
+- `:Phpcbs` - run phpcbf to reformat your code up to your configured standards (same as phpcs). It saves the file before running it.
 
 ### Code Coverage
 
@@ -101,6 +103,9 @@ let g:phpqa_codesniffer_autorun = 0
 
 " Show code coverage on load (default = 0)
 let g:phpqa_codecoverage_autorun = 1
+
+" Run PHPCBF on save (default = 0)
+let g:phpqa_codefixer_autorun = 1
 ```
 
 By default, the location list window will open when mess detector/codesniffer violations are found. You can stop this happening by setting this option:
@@ -136,3 +141,4 @@ This plugin is released under the [MIT License][6].
 [4]: https://github.com/gmarik/vundle
 [5]: http://www.vim.org/scripts/script.php?script_id=124
 [6]: https://github.com/joonty/vim-phpqa/raw/master/LICENSE
+[7]: https://github.com/squizlabs/PHP_CodeSniffer/wiki/Fixing-Errors-Automatically
