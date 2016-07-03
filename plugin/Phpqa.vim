@@ -163,6 +163,12 @@ endif
 nnoremap <unique> <script> <Plug>QAToolsToggle <SID>QAToolsToggle
 nnoremap <silent> <SID>QAToolsToggle :call Phpqa#QAToolsToggle()<cr>
 
+if !hasmapto('<Plug>PhpCodeFixer', 'n')
+    nmap <unique> <Leader>qf  <Plug>PhpCodeFixer
+endif
+nnoremap <unique> <script> <Plug>PhpCodeFixer <SID>PhpCodeFixer
+nnoremap <silent> <SID>PhpCodeFixer :call Phpqa#PhpCodeFixer()<cr>
+
 " Code sniffer sign config
 let g:phpqa_codesniffer_append = "(PHP_CodeSniffer)"
 let g:phpqa_codesniffer_type = "S"
