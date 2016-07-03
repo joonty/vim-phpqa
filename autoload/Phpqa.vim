@@ -135,6 +135,24 @@ function! Phpqa#PhpCodeSniffer()
     return l:phpcs_list
 endf
 
+" Run PHP code fixer.
+function! Phpqa#PhpCodeFixer()
+    if @% == ""
+        echohl Error | echo "Invalid buffer (are you in the error window?)" |echohl None
+        return []
+    endif
+    " Run codefixer if the command hasn't been unset
+	if 0 != len(g:phpqa_codefixer_cmd)
+        write
+		call system(g:phpqa_codefixer_cmd." ".g:phpqa_codesniffer_args." ".@%)
+		edit
+	else
+        if 1 == g:phpqa_verbose
+            echohl Error | echo "PHPCBF binary set to empty, not running code beautifier and fixer" | echohl None
+        endif
+    endif
+endf
+
 " Run mess detector.
 "
 " The user is required to specify a ruleset XML file if they haven't already.
@@ -160,7 +178,7 @@ function! Phpqa#PhpMessDetector()
 endf
 
 " Run Code Sniffer and Mess Detector.
-function! Phpqa#PhpQaTools(runcs,runmd)
+function! Phpqa#PhpQaTools(runcs,runmd,runcbf)
     let l:bufNo = bufnr('%')
     call s:RemoveSigns()
 
@@ -174,6 +192,10 @@ function! Phpqa#PhpQaTools(runcs,runmd)
         let l:phpmd_list = Phpqa#PhpMessDetector()
     else
         let l:phpmd_list = []
+    endif
+
+	if 1 == a:runcbf
+		call Phpqa#PhpCodeFixer()
     endif
 
     let error_list=s:CombineLists(l:phpcs_list,l:phpmd_list)

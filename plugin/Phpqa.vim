@@ -46,6 +46,12 @@ if !exists("g:phpqa_codesniffer_cmd")
     let g:phpqa_codesniffer_cmd='phpcs'
 endif
 
+" PHPCBF binary (PHP_CodeSniffer)
+if !exists("g:phpqa_codefixer_cmd")
+    let g:phpqa_codefixer_cmd='phpcbf'
+endif
+
+
 " Arguments to pass to code sniffer, e.g standard name
 if !exists("g:phpqa_codesniffer_args")
     let g:phpqa_codesniffer_args=""
@@ -88,6 +94,11 @@ if !exists("g:phpqa_codesniffer_autorun")
     let g:phpqa_codesniffer_autorun = 1
 endif
 
+" Whether to automatically run codefixer when saving a file
+if !exists("g:phpqa_codefixer_autorun")
+    let g:phpqa_codefixer_autorun = 0
+endif
+
 " Whether to automatically run messdetector when saving a file
 if !exists("g:phpqa_messdetector_autorun")
     let g:phpqa_messdetector_autorun = 1
@@ -111,7 +122,7 @@ function! PhpqaRunAll()
         " Check syntax valid before running others
         let retval=Phpqa#PhpLint()
         if 0 == retval && 1 == g:phpqa_run_on_write
-            call Phpqa#PhpQaTools(g:phpqa_codesniffer_autorun,g:phpqa_messdetector_autorun)
+            call Phpqa#PhpQaTools(g:phpqa_codesniffer_autorun,g:phpqa_messdetector_autorun,g:phpqa_codefixer_autorun)
         endif
     endif
 endf
@@ -140,8 +151,9 @@ endif
 
 " Allow each command to be called individually
 command Php call Phpqa#PhpLint()
-command Phpcs call Phpqa#PhpQaTools(1,0)
-command Phpmd call Phpqa#PhpQaTools(0,1)
+command Phpcs call Phpqa#PhpQaTools(1,0,0)
+command Phpcbf call Phpqa#PhpQaTools(0,0,1)
+command Phpmd call Phpqa#PhpQaTools(0,1,0)
 command Phpcc call Phpqa#PhpCodeCoverage()
 
 
@@ -150,6 +162,12 @@ if !hasmapto('<Plug>QAToolsToggle', 'n')
 endif
 nnoremap <unique> <script> <Plug>QAToolsToggle <SID>QAToolsToggle
 nnoremap <silent> <SID>QAToolsToggle :call Phpqa#QAToolsToggle()<cr>
+
+if !hasmapto('<Plug>PhpCodeFixer', 'n')
+    nmap <unique> <Leader>qf  <Plug>PhpCodeFixer
+endif
+nnoremap <unique> <script> <Plug>PhpCodeFixer <SID>PhpCodeFixer
+nnoremap <silent> <SID>PhpCodeFixer :call Phpqa#PhpCodeFixer()<cr>
 
 " Code sniffer sign config
 let g:phpqa_codesniffer_append = "(PHP_CodeSniffer)"
