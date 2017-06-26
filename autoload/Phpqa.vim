@@ -90,7 +90,7 @@ function! Phpqa#PhpLint()
         if 0 != len(g:phpqa_php_cmd)
             let l:bufNo = bufnr('%')
             call s:RemoveSigns()
-            let l:php_output=system(g:phpqa_php_cmd." -l ".@%." 1>/dev/null")
+            let l:php_output=system(g:phpqa_php_cmd." -l ".expand("%:p")." 1>/dev/null")
             let l:php_list=split(l:php_output, "\n")
 
             if 0 != v:shell_error && match(l:php_list[0],"No syntax errors") == -1
@@ -124,7 +124,7 @@ function! Phpqa#PhpCodeSniffer()
     endif
     " Run codesniffer if the command hasn't been unset
     if 0 != len(g:phpqa_codesniffer_cmd)
-        let l:phpcs_output=system(g:phpqa_codesniffer_cmd." ".g:phpqa_codesniffer_args." --report=emacs ".@%)
+        let l:phpcs_output=system(g:phpqa_codesniffer_cmd." ".g:phpqa_codesniffer_args." --report=emacs ".expand("%:p"))
         let l:phpcs_list=split(l:phpcs_output, "\n")
     else
         let l:phpcs_list = []
@@ -150,7 +150,7 @@ function! Phpqa#PhpMessDetector()
             let file_tmp = input("Please specify a mess detector ruleset file, or built in rule: ",file_tmp)
             let g:phpqa_messdetector_ruleset = file_tmp
         endwhile
-        let l:phpmd_output=system(g:phpqa_messdetector_cmd." ".@%." text ".g:phpqa_messdetector_ruleset)
+        let l:phpmd_output=system(g:phpqa_messdetector_cmd." ".expand("%:p")." text ".g:phpqa_messdetector_ruleset)
         let l:phpmd_list=split(l:phpmd_output, "\n")
     else
         let l:phpmd_list = []
